@@ -1,0 +1,92 @@
+---
+title: "Shiny Application and Reproducible Pitch"
+author: "Jie Li"
+date: "July 17, 2018"
+output: ioslides_presentation
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+##Introduction
+The Mtcars Plotter is an plotting tool for an exploratory data analysis of the mtcars data set in R. It allows you display diffrent dimensions of the dataset and plot it agains an axis of choice. Furthermore you can display a smoother and facet the rows and columns.
+
+1. mpg Miles/(US) gallon
+2. cyl Number of cylinders
+3. disp Displacement (cu.in.)
+4. hp Gross horsepower
+5. drat Rear axle ratio
+6. wt Weight (1000 lbs)
+7. qsec ¼ mile time vs V/S
+8. am Transmission (0 = automatic, 1 = manual)
+9. gear Number of forward gears
+10. carb Number of carburetors
+
+##Recommendation
+
+The program is represting using shiny presentation.
+The testing setup are suggested as:
+
+Sample size:30
+
+X=mpg
+
+Y=hp
+
+Color=wt
+
+Facet colum=am
+
+Facet row=none
+
+Smooth =T
+
+## R Output
+
+```{r}
+library(shiny)
+library(ggplot2)
+dataset <- mtcars
+inputPanel(
+          sliderInput('sampleSize', 'Sample Size', min=10, max=nrow(dataset),
+                      value=min(20, nrow(dataset)), step=5, round=0),
+          selectInput('x', 'X', names(dataset)),
+          selectInput('y', 'Y', names(dataset), names(dataset)[[4]]),
+          selectInput('color', 'Color', c('None', names(dataset))),
+          # checkboxInput('jitter', 'Jitter'),
+          checkboxInput('smooth', 'Smooth'),
+          selectInput('facet_row', 'Facet Row', c(None='.', names(dataset))),
+          selectInput('facet_col', 'Facet Column', c(None='.', names(dataset)))
+)
+
+
+renderPlot({
+       dataset <- reactive( {
+          mtcars[sample(nrow(mtcars), input$sampleSize),]
+     })
+
+     
+
+          p <- ggplot(dataset(), aes_string(x=input$x, y=input$y)) + geom_point()
+
+          if (input$color != 'None')
+               p <- p + aes_string(color=input$color)
+
+          facets <- paste(input$facet_row, '~', input$facet_col)
+          if (facets != '. ~ .')
+               p <- p + facet_grid(facets)
+
+          # if (input$jitter)
+          #      p <- p + geom_jitter()
+          if (input$smooth)
+               p <- p + geom_smooth()
+          print(p)
+},height = 200,width = 400)
+
+```
+
+
+## Thank you
+
