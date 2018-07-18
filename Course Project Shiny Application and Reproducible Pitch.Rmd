@@ -10,7 +10,7 @@ runtime: shiny
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-##Introduction
+## Introduction
 The Mtcars Plotter is an plotting tool for an exploratory data analysis of the mtcars data set in R. It allows you display diffrent dimensions of the dataset and plot it agains an axis of choice. Furthermore you can display a smoother and facet the rows and columns.
 
 1. mpg Miles/(US) gallon
@@ -24,7 +24,7 @@ The Mtcars Plotter is an plotting tool for an exploratory data analysis of the m
 9. gear Number of forward gears
 10. carb Number of carburetors
 
-##Recommendation
+## Recommendation
 
 The program is represting using shiny presentation.
 The testing setup are suggested as:
